@@ -9,13 +9,14 @@ import sendResponse from "../../utils/sendResponse";
 const CreateProduct = catchAsync(async (req,res)=>{
     const productData=req.body;
 
+    
 
     const result =  await Products.createProductIntoDB(productData);
 
     sendResponse(res,{
         statusCode: httpStatus.OK,
         success:true,
-        message: "Product created successfully",
+        message: "New Product Added successfully",
         data:result,
     })
 })
@@ -35,6 +36,31 @@ const getAllProducts = catchAsync(async(req,res)=>{
         statusCode: httpStatus.OK,
         success:true,
         message: "Products retrieved successfully",
+        data:result,
+    })
+})
+// get cart product details 
+const getAllCartProducts = catchAsync(async(req,res)=>{
+   let productIds = req.query.productIds;
+   
+   if(typeof productIds === 'string'){
+    productIds = productIds.split(',').map(id=>id.trim());
+   }
+ 
+    const result = await Products.getAllCartsProductDetailsFromDB(productIds);
+   
+    if(!result){
+        return sendResponse(res,{
+             statusCode: httpStatus.NOT_FOUND,
+             success:false,
+             message: "No Data Found",
+             data:[],
+         })
+     }
+    sendResponse(res,{
+        statusCode: httpStatus.OK,
+        success:true,
+        message: "Carts Products retrieved successfully",
         data:result,
     })
 })
@@ -109,5 +135,6 @@ export const ProductsController = {
     updateProduct,
     deleteProduct,
     getSingleProduct,
+    getAllCartProducts
     
 }

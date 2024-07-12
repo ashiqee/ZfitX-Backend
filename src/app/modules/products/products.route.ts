@@ -12,5 +12,9 @@ const router = express.Router()
 
 
 router.post('/',validateRequest(ProductValidation.createProductValidationSchema), ProductsController.CreateProduct)
+router.get('/', ProductsController.getAllProducts)
+router.get('/carts', ProductsController.getAllCartProducts)
+router.get('/:id', ProductsController.getSingleProduct)
+router.put('/:id',validateRequest(ProductValidation.updateProductValidationSchema), ProductsController.updateProduct)
 
 export const ProductsRoutes = router;

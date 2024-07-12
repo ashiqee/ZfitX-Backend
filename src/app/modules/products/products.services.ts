@@ -7,6 +7,8 @@ import { TProduct } from './products.interface';
 
 
 const createProductIntoDB = async (payload: TProduct) => {
+
+  
   const isProductExists = await Product.findOne({ name: payload.p_name });
   if (isProductExists) {
     throw new AppError(httpStatus.NOT_FOUND, 'Same Product Name already exist');
@@ -23,6 +25,17 @@ const getAllProductsFromDB = async () => {
   const result = await Product.find();
   return result;
 };
+
+//get all carts products =
+
+const getAllCartsProductDetailsFromDB  = async(productIds)=>{
+
+  const result = await Product.find({
+    _id:{$in:productIds}
+  }).select('-createdAt -p_description -p_isDeleted -updatedAt -__v')
+
+  return result;
+}
 
 // get a Product
 
@@ -78,5 +91,6 @@ export const Products = {
   getSingleProductFromDB,
   updateProductIntoDB,
   deleteProductFromDB,
+  getAllCartsProductDetailsFromDB
   
 };
