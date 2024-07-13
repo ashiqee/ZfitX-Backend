@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { Product } from './products.model';
 import { TProduct } from './products.interface';
+import { ProductFilters } from './products.controller';
 
 
 
@@ -21,8 +22,40 @@ const createProductIntoDB = async (payload: TProduct) => {
 
 // get all Products
 
-const getAllProductsFromDB = async () => {
-  const result = await Product.find();
+const getAllProductsFromDB = async (filterQuery:ProductFilters) => {
+
+let query:Record<string,unknown> = {}
+
+// searchTerm filter
+if(filterQuery.searchTerm){
+  query.p_name ={$regex:filterQuery.searchTerm,$options:'i'}
+}
+
+
+
+// stockStatus filter
+if(filterQuery.stockStatus){
+  query.p_stock = filterQuery.stockStatus
+}
+
+
+// categories filter
+if(filterQuery.categories?.length > 0){
+  query.p_category = {$in:filterQuery.categories}
+ 
+  
+}
+
+  let result = await Product.find(query);
+
+// sortByPrice price asc or desc
+if (filterQuery.sortByPrice) {
+  const sortByPriceProduct = filterQuery.sortByPrice === 'asc' ? 1 : -1;
+  result = result.sort((a, b) => {
+    return sortByPriceProduct * (a.p_price - b.p_price);
+  });
+}
+
   return result;
 };
 

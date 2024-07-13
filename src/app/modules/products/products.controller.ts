@@ -21,9 +21,38 @@ const CreateProduct = catchAsync(async (req,res)=>{
     })
 })
 
+export interface ProductFilters{
+    searchTerm?:string;
+    sortByPrice?:string;
+    stockStatus?:'inStock'|'outOfStock';
+    categories?:string[]
+}
+
 const getAllProducts = catchAsync(async(req,res)=>{
    
-    const result = await Products.getAllProductsFromDB();
+
+
+    const {searchTerm,sortByPrice,stockStatus,categories}= req.query as Partial<Record<keyof ProductFilters, string>>;
+    
+    let filterQuery : ProductFilters = {
+        searchTerm,
+        sortByPrice,
+        stockStatus: undefined,
+        categories: categories ? categories.split(',') : [],
+    };
+
+    
+        if(sortByPrice === "asc" || sortByPrice === 'desc'){
+            filterQuery.sortByPrice = sortByPrice
+        };
+
+      
+        if(stockStatus === 'inStock' || stockStatus === 'outOfStock'){
+            filterQuery.stockStatus = stockStatus;
+        };
+  
+
+    const result = await Products.getAllProductsFromDB(filterQuery);
     if(!result){
         return sendResponse(res,{
              statusCode: httpStatus.NOT_FOUND,
