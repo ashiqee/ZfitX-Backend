@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import httpStatus from "http-status";
 
 import { Products,  } from "./products.services";
@@ -73,11 +74,13 @@ const getAllCartProducts = catchAsync(async(req,res)=>{
    let productIds = req.query.productIds;
    
    
-   if(typeof productIds === 'string'){
-    productIds = productIds.split(',').map(id=>id.trim());
-   }
+   if (typeof productIds === 'string') {
+    productIds = productIds.split(',').map(id => id.trim());
+  } else if (!Array.isArray(productIds)) {
+    productIds = [];
+  }
  
-    const result = await Products.getAllCartsProductDetailsFromDB(productIds);
+    const result = await Products.getAllCartsProductDetailsFromDB(productIds as string[] );
    
     if(!result){
         return sendResponse(res,{

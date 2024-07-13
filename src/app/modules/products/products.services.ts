@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-unused-vars */
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
@@ -40,10 +41,8 @@ if(filterQuery.stockStatus){
 
 
 // categories filter
-if(filterQuery.categories?.length > 0){
-  query.p_category = {$in:filterQuery.categories}
- 
-  
+if ((filterQuery.categories ?? []).length > 0) {
+  query.p_category = { $in: filterQuery.categories };
 }
 
   let result = await Product.find(query);
@@ -61,7 +60,7 @@ if (filterQuery.sortByPrice) {
 
 //get all carts products =
 
-const getAllCartsProductDetailsFromDB  = async(productIds)=>{
+const getAllCartsProductDetailsFromDB  = async(productIds:string[])=>{
 
   const result = await Product.find({
     _id:{$in:productIds}
