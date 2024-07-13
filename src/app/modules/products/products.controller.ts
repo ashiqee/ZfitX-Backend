@@ -118,7 +118,10 @@ const getSingleProduct = catchAsync(async(req,res)=>{
 
 const updateProduct = catchAsync(async(req,res)=>{
     const {id}=req.params;
+    console.log("gett IID",id);
+    
     const updateData = req.body;
+    
     const result = await Products.updateProductIntoDB(id,updateData)
     if(!result){
        return sendResponse(res,{
