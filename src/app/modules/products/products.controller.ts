@@ -140,6 +140,8 @@ const updateProduct = catchAsync(async(req,res)=>{
 //delete Product 
 const deleteProduct = catchAsync(async(req,res)=>{
     const {id}=req.params;
+  
+    
     const result = await Products.deleteProductFromDB(id);
 
     if(!result){

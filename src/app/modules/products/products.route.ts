@@ -15,6 +15,7 @@ router.post('/',validateRequest(ProductValidation.createProductValidationSchema)
 router.get('/', ProductsController.getAllProducts)
 router.get('/carts', ProductsController.getAllCartProducts)
 router.get('/:id', ProductsController.getSingleProduct)
+router.delete('/:id', ProductsController.deleteProduct)
 router.put('/:id',validateRequest(ProductValidation.updateProductValidationSchema), ProductsController.updateProduct)
 
 export const ProductsRoutes = router;
