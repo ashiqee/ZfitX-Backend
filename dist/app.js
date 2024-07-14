@@ -17,13 +17,15 @@ const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const routes_1 = __importDefault(require("./app/routes"));
 const cors_1 = __importDefault(require("cors"));
 const globalErrorhandler_1 = __importDefault(require("./app/middlewares/globalErrorhandler"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)({
-    origin: ['http://localhost:5173']
-}));
+// // CORS configuration
+// app.use(cors({
+//     origin: 'https://zfitx.vercel.app', // Allow requests from this origin
+//     methods: ['GET', 'POST'], // Allow only GET and POST requests
+//     allowedHeaders: ['Content-Type'], // Allow the Content-Type header
+//   }));
+app.use((0, cors_1.default)());
 app.use('/api/v1', routes_1.default);
 const apiCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const message = "ZFitX server api running";
