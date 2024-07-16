@@ -3,7 +3,7 @@ import { TOrder } from "./orders.interface";
 
 const orderItemSchema = new Schema(
     {
-        productId:{type:String,require:true},
+        productId:{type:String,require:true,ref:"Product"},
         quantity:{type:Number,require:true}
     }
 )
