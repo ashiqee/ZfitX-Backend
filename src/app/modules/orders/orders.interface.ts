@@ -12,8 +12,9 @@ export interface TOrder{
     o_phone:string;
     o_address:string;
     o_state:string;
-    o_status:string;
-    o_payment_status:string;
+    o_status?:string;
+    o_payment_status?:string;
+    o_transcationId?:string;
     o_city:string;
     o_cartItems:TCartItem[]
 }

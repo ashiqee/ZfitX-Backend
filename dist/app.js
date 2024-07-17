@@ -28,7 +28,13 @@ const stripe = new stripe_1.default(config_1.default.STRIPE_SECRET_KEY);
 //     methods: ['GET', 'POST'], // Allow only GET and POST requests
 //     allowedHeaders: ['Content-Type'], // Allow the Content-Type header
 //   }));
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5173',
+    // origin: 'https://zfitx.vercel.app', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204
+}));
 app.use('/api/v1', routes_1.default);
 const apiCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const message = "ZFitX server api running";

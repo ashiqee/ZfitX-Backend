@@ -17,7 +17,13 @@ const stripe = new Stripe(config.STRIPE_SECRET_KEY as string);
 //     allowedHeaders: ['Content-Type'], // Allow the Content-Type header
 //   }));
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    // origin: 'https://zfitx.vercel.app', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204
+  }));
 
 app.use('/api/v1',router)
 

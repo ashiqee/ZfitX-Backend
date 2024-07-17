@@ -34,6 +34,10 @@ const OrderSchema = new Schema<TOrder>(
             type:String,
            
         },
+        o_transcationId:{
+            type:String,
+           
+        },
         o_status: {
             type: String,
             enum: ['processing', 'hold', 'completed', 'pending'],

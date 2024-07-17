@@ -29,6 +29,13 @@ const createOrderIntoDB = async (payload: TOrder) => {
       cartProduct.p_stock -= cartItem.quantity;
       await cartProduct.save({ session });
 
+      // Check if transaction ID is present and set payment status
+      if (payload.o_transcationId) {
+        payload.o_payment_status = 'paid';
+      } else {
+        payload.o_payment_status = 'due';
+      }
+
       //create the order
       const result = await Orders.create([payload], { session });
 
@@ -46,7 +53,9 @@ const createOrderIntoDB = async (payload: TOrder) => {
 };
 
 const getAllOrderFromDB = async () => {
-  const result = await Orders.find().populate("o_cartItems.productId").sort({createdAt:-1});
+  const result = await Orders.find()
+    .populate('o_cartItems.productId')
+    .sort({ createdAt: -1 });
 
   return result;
 };

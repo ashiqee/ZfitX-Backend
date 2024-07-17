@@ -32,6 +32,13 @@ const createOrderIntoDB = (payload) => __awaiter(void 0, void 0, void 0, functio
             }
             cartProduct.p_stock -= cartItem.quantity;
             yield cartProduct.save({ session });
+            // Check if transaction ID is present and set payment status
+            if (payload.o_transcationId) {
+                payload.o_payment_status = 'paid';
+            }
+            else {
+                payload.o_payment_status = 'due';
+            }
             //create the order
             const result = yield orders_model_1.Orders.create([payload], { session });
             //commit the transaction
@@ -47,7 +54,9 @@ const createOrderIntoDB = (payload) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 const getAllOrderFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield orders_model_1.Orders.find().populate("o_cartItems.productId").sort({ createdAt: -1 });
+    const result = yield orders_model_1.Orders.find()
+        .populate('o_cartItems.productId')
+        .sort({ createdAt: -1 });
     return result;
 });
 exports.OrdersServices = {
