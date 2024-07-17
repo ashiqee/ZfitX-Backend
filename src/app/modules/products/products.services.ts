@@ -45,7 +45,7 @@ if ((filterQuery.categories ?? []).length > 0) {
   query.p_category = { $in: filterQuery.categories };
 }
 
-  let result = await Product.find(query);
+  let result = await Product.find(query).sort({createdAt:-1});
 
 // sortByPrice price asc or desc
 if (filterQuery.sortByPrice) {

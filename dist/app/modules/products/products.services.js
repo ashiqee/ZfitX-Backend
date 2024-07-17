@@ -53,7 +53,7 @@ const getAllProductsFromDB = (filterQuery) => __awaiter(void 0, void 0, void 0, 
     if (((_a = filterQuery.categories) !== null && _a !== void 0 ? _a : []).length > 0) {
         query.p_category = { $in: filterQuery.categories };
     }
-    let result = yield products_model_1.Product.find(query);
+    let result = yield products_model_1.Product.find(query).sort({ createdAt: -1 });
     // sortByPrice price asc or desc
     if (filterQuery.sortByPrice) {
         const sortByPriceProduct = filterQuery.sortByPrice === 'asc' ? 1 : -1;

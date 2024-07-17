@@ -17,8 +17,11 @@ const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const routes_1 = __importDefault(require("./app/routes"));
 const cors_1 = __importDefault(require("cors"));
 const globalErrorhandler_1 = __importDefault(require("./app/middlewares/globalErrorhandler"));
+const stripe_1 = __importDefault(require("stripe"));
+const config_1 = __importDefault(require("./app/config"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+const stripe = new stripe_1.default(config_1.default.STRIPE_SECRET_KEY);
 // // CORS configuration
 // app.use(cors({
 //     origin: 'https://zfitx.vercel.app', // Allow requests from this origin
@@ -32,6 +35,24 @@ const apiCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(message);
 });
 app.get('/api', apiCheck);
+app.post('/api/v1/create-payment-intent', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { amount } = req.body;
+    try {
+        const paymentIntent = yield stripe.paymentIntents.create({
+            amount,
+            currency: 'usd',
+        });
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
+    catch (error) {
+        res.status(400).send({
+            error: error.message,
+        });
+    }
+}));
 app.use(globalErrorhandler_1.default);
 app.use(notFound_1.default);
 exports.default = app;

@@ -105,7 +105,6 @@ const getSingleProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 const updateProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    console.log("gett IID", id);
     const updateData = req.body;
     const result = yield products_services_1.Products.updateProductIntoDB(id, updateData);
     if (!result) {

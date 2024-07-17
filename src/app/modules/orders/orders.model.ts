@@ -34,6 +34,16 @@ const OrderSchema = new Schema<TOrder>(
             type:String,
            
         },
+        o_status: {
+            type: String,
+            enum: ['processing', 'hold', 'completed', 'pending'],
+            default: 'pending',
+          },
+        o_payment_status: {
+            type: String,
+            enum: ['paid', 'due', 'refund'],
+            default: 'due',
+          },
         o_phone:{
             type:String,
             required:true,
