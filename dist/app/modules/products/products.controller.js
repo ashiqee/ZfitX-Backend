@@ -29,10 +29,12 @@ const CreateProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const getAllProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { searchTerm, sortByPrice, stockStatus, categories } = req.query;
+    const { searchTerm, sortByPrice, stockStatus, categories, pageLimit, currentPage } = req.query;
     let filterQuery = {
         searchTerm,
         sortByPrice,
+        pageLimit,
+        currentPage,
         stockStatus: undefined,
         categories: categories ? categories.split(',') : [],
     };

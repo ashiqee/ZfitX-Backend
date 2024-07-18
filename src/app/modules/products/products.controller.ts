@@ -26,18 +26,22 @@ export interface ProductFilters{
     searchTerm?:string;
     sortByPrice?:string;
     stockStatus?:'inStock'|'outOfStock';
-    categories?:string[]
+    categories?:string[];
+    pageLimit?:string;
+    currentPage?:string;
 }
 
 const getAllProducts = catchAsync(async(req,res)=>{
    
 
 
-    const {searchTerm,sortByPrice,stockStatus,categories}= req.query as Partial<Record<keyof ProductFilters, string>>;
+    const {searchTerm,sortByPrice,stockStatus,categories,pageLimit,currentPage}= req.query as Partial<Record<keyof ProductFilters, string>>;
     
     let filterQuery : ProductFilters = {
         searchTerm,
         sortByPrice,
+        pageLimit,
+        currentPage,
         stockStatus: undefined,
         categories: categories ? categories.split(',') : [],
     };

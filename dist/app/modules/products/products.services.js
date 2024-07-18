@@ -53,7 +53,11 @@ const getAllProductsFromDB = (filterQuery) => __awaiter(void 0, void 0, void 0, 
     if (((_a = filterQuery.categories) !== null && _a !== void 0 ? _a : []).length > 0) {
         query.p_category = { $in: filterQuery.categories };
     }
-    let result = yield products_model_1.Product.find(query).sort({ createdAt: -1 });
+    // Pagination 
+    const pageLimit = Number(filterQuery.pageLimit);
+    const currentPage = Number(filterQuery.currentPage);
+    const offset = (currentPage - 1) * pageLimit;
+    let result = yield products_model_1.Product.find(query).sort({ createdAt: -1 }).skip(offset).limit(pageLimit);
     // sortByPrice price asc or desc
     if (filterQuery.sortByPrice) {
         const sortByPriceProduct = filterQuery.sortByPrice === 'asc' ? 1 : -1;
@@ -61,7 +65,10 @@ const getAllProductsFromDB = (filterQuery) => __awaiter(void 0, void 0, void 0, 
             return sortByPriceProduct * (a.p_price - b.p_price);
         });
     }
-    return result;
+    let isDeletedFilter = { p_isDeleted: { $ne: true } };
+    // This will give the total number of results without pagination
+    let totalResults = yield products_model_1.Product.countDocuments(isDeletedFilter);
+    return { result, totalResults };
 });
 //get all carts products =
 const getAllCartsProductDetailsFromDB = (productIds) => __awaiter(void 0, void 0, void 0, function* () {

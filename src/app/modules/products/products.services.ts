@@ -45,7 +45,17 @@ if ((filterQuery.categories ?? []).length > 0) {
   query.p_category = { $in: filterQuery.categories };
 }
 
-  let result = await Product.find(query).sort({createdAt:-1});
+
+// Pagination 
+const pageLimit = Number(filterQuery.pageLimit)
+const currentPage = Number(filterQuery.currentPage)
+
+const offset = (currentPage-1)*pageLimit;
+
+
+  let result = await Product.find(query).sort({createdAt:-1}).skip(offset).limit(pageLimit);
+
+
 
 // sortByPrice price asc or desc
 if (filterQuery.sortByPrice) {
@@ -55,7 +65,13 @@ if (filterQuery.sortByPrice) {
   });
 }
 
-  return result;
+let isDeletedFilter= {p_isDeleted:{$ne:true}}
+// This will give the total number of results without pagination
+  let totalResults = await Product.countDocuments(isDeletedFilter); 
+
+
+
+  return {result,totalResults};
 };
 
 //get all carts products =
